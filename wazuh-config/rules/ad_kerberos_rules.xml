@@ -1,0 +1,49 @@
+<!--
+  Règles de détection custom pour attaques Kerberos sur Active Directory
+  Group ID range: 100010-100030 (réservé, à ajuster selon les règles déjà existantes sur le manager)
+-->
+<group name="ad_kerberos,attack,">
+
+  <!-- AS-REP Roasting : Event ID 4768 avec chiffrement RC4 (0x17) -->
+  <rule id="100010" level="10">
+    <if_group>windows</if_group>
+    <field name="win.system.eventID">^4768$</field>
+    <field name="win.eventdata.ticketEncryptionType">^0x17$</field>
+    <description>Possible AS-REP Roasting : TGT demandé avec chiffrement RC4 faible</description>
+    <mitre>
+      <id>T1558.004</id>
+    </mitre>
+  </rule>
+
+  <!-- Kerberoasting : Event ID 4769 avec chiffrement RC4, répété -->
+  <rule id="100011" level="10" frequency="5" timeframe="120">
+    <if_group>windows</if_group>
+    <field name="win.system.eventID">^4769$</field>
+    <field name="win.eventdata.ticketEncryptionType">^0x17$</field>
+    <description>Possible Kerberoasting : demandes TGS répétées avec chiffrement RC4</description>
+    <mitre>
+      <id>T1558.003</id>
+    </mitre>
+  </rule>
+
+  <!-- Brute-force : rafale d'échecs d'authentification -->
+  <rule id="100012" level="10" frequency="8" timeframe="60">
+    <if_group>windows</if_group>
+    <field name="win.system.eventID">^4625$</field>
+    <description>Possible brute-force : rafale d'échecs d'authentification</description>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+  </rule>
+
+  <!-- Compromission probable : succès de logon après rafale d'échecs -->
+  <rule id="100013" level="12">
+    <if_matched_sid>100012</if_matched_sid>
+    <field name="win.system.eventID">^4624$</field>
+    <description>Logon réussi après rafale d'échecs : compromission de compte probable</description>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+  </rule>
+
+</group>

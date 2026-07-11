@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Rapports générés
+report.json
+*.html
+!docs/**/*.html
+
+# Secrets / credentials
+*.env
+.env
+credentials.txt
+*.pem
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
