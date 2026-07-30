@@ -1,8 +1,12 @@
 """
 Mapping des règles de détection custom vers les techniques MITRE ATT&CK.
+
+Note : les alertes Wazuh contiennent déjà un bloc rule.mitre nativement
+(visible dans les résultats de l'API indexer), donc ce module sert surtout
+de fallback/normalisation et de source de vérité indépendante du format
+exact retourné par Wazuh.
 """
 
-# Correspondance rule_id Wazuh -> technique MITRE ATT&CK
 MITRE_MAPPING = {
     "100010": {
         "technique_id": "T1558.004",
@@ -24,11 +28,16 @@ MITRE_MAPPING = {
         "technique_name": "Brute Force (compromission probable)",
         "tactic": "Credential Access",
     },
+    "100014": {
+        "technique_id": "T1110",
+        "technique_name": "Brute Force (échec individuel)",
+        "tactic": "Credential Access",
+    },
 }
 
 
 def enrich_alert(alert: dict) -> dict:
-    """Ajoute les métadonnées MITRE ATT&CK à une alerte Wazuh brute."""
+    """Ajoute/normalise les métadonnées MITRE ATT&CK sur une alerte Wazuh brute."""
     rule_id = str(alert.get("rule", {}).get("id", ""))
     mitre_info = MITRE_MAPPING.get(rule_id)
 
