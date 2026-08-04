@@ -46,7 +46,7 @@ Détails complets dans [docs/attack-scenarios.md](docs/attack-scenarios.md).
 ### 1. Wazuh manager
 
 ```bash
-curl -sO https://packages.wazuh.com/4.x/wazuh-install.sh
+curl -sO https://packages.wazuh.com/4.14/wazuh-install.sh
 sudo bash wazuh-install.sh -a
 ```
 
@@ -89,11 +89,17 @@ mini-soc-ad-detection/
 └── LICENSE
 ```
 
+## Résultats
+
+Les trois techniques d'attaque simulées (AS-REP Roasting, Kerberoasting, brute-force) ont été détectées avec succès par les règles Wazuh custom (`100011`, `100012`, `100013`). Le module Python de corrélation enrichit ces alertes avec un mapping MITRE ATT&CK et détecte les chaînes d'attaque multi-étapes. Voir [docs/attack-scenarios.md](docs/attack-scenarios.md) pour le détail complet, captures d'écran à l'appui.
+
 ## Limitations connues
 
 - Environnement de lab isolé, non représentatif d'un AD de production à grande échelle
+- L'indexer Wazuh a été exposé sur toutes les interfaces réseau (`network.host: 0.0.0.0`) pour permettre l'accès au module Python depuis l'hôte — à restreindre en production (authentification mutuelle TLS, réseau dédié)
 - Les règles de détection sont calibrées sur ce lab et nécessiteraient un tuning pour un environnement réel
 - Pas de gestion des faux positifs à grande échelle (hors périmètre du projet)
+- Pas de capture d'écran de la commande Kali pour le scénario brute-force (détection validée côté dashboard uniquement)
 
 ## Auteure
 
