@@ -66,6 +66,12 @@ sudo systemctl restart wazuh-manager
 ```bash
 cd detection-engine
 pip install -r requirements.txt
+
+# Identifiants de l'indexer Wazuh (ne jamais les écrire dans le code)
+export WAZUH_INDEXER_PASSWORD='<mot de passe indexer>'
+export WAZUH_INDEXER_URL='https://<ip-wazuh>:9200'   # optionnel
+export WAZUH_INDEXER_USER='admin'                     # optionnel
+
 python correlator.py
 ```
 
